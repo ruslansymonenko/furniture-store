@@ -1,0 +1,42 @@
+# Виртуальное окружение
+venv/
+.env
+
+# Python-кэш
+__pycache__/
+*.py[cod]
+*.pyc
+
+# Локальные настройки и секреты
+*.env
+local_settings.py
+*.secret
+*.key
+
+# Файлы базы данных
+*.sqlite3
+*.db
+
+# Медиа-файлы
+media/
+
+# Статические файлы (собранные, если используете collectstatic)
+staticfiles/
+
+# Логи
+*.log
+
+# Временные файлы редакторов
+*.swp
+*.swo
+*~
+
+# Файлы IDE
+.idea/
+.vscode/
+
+# MacOS
+.DS_Store
+
+# Windows
+Thumbs.db

@@ -1,0 +1,22 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static "deps/css/my_footer_css.css" %}">
+{% endblock %}
+
+{% block content %}
+
+    <div class="mt-5 p-2 bg-white custom-shadow d-flex justify-content-center align-content-center flex-column rounded">
+        <h2><strong>{{ content }}</strong></h2>
+        <p>{{ text_on_page }}</p>
+    </div>
+{% endblock %}
+
+{% block footer %}
+    <footer class="py-4 bg-dark">
+        <div class="container">
+            <p class="m-0 text-center text-white">Furniture Store</p>
+        </div>
+    </footer>
+{% endblock %}

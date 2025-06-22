@@ -28,7 +28,7 @@ class Product(models.Model):
         verbose_name_plural = 'Products'
 
     def __str__(self):
-        return f'{self.name}, {self.category.name}, Quantity: {self.quantity}'
+        return f'Product id: {self.display_id()} ___ {self.name}, {self.category.name}, Quantity: {self.quantity}'
 
     def display_id(self):
         return f'{self.id:05}'

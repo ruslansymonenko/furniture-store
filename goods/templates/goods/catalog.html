@@ -55,7 +55,7 @@
                                 <img src="{% static 'deps/images/Not found image.png' %}" class="card-img-top" alt={{ product.name }}>
                             {% endif %}
                             <div class="card-body d-flex flex-column">
-                                <a href="#">
+                                <a href="{% url 'goods:product' product.slug %}">
                                     <p class="card-title">{{ product.name|truncatechars:15 }}</p>
                                 </a>
                                 <p class="card-text text-truncate">{{ product.description }}</p>

@@ -24,11 +24,39 @@ body {
   padding: 5px 10px;
   border-radius: 3px;
   font-size: 1rem;
-  box-shadow: 2px 2px 15px 9px #000000;
+  box-shadow: 2px 2px 5px -1px #000000;
 }
 
 .badge-banner {
   top: 80%;
   border-radius: 15px;
   font-size: 0.7rem;
+}
+
+.custom-card {
+    height: 450px;
+    overflow: hidden;
+}
+
+.card-img-top {
+    max-height: 200px;
+    object-fit: cover;
+}
+
+.card-body {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-title, .card-text, .product_id {
+    margin-bottom: 0.5rem;
+}
+
+.card-title {
+    font-size: 1rem;
+}
+
+.card-text {
+    font-size: 0.875rem;
 }

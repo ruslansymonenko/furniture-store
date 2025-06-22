@@ -4,11 +4,11 @@ from goods.models import Product
 
 
 def catalog(request):
-    products = Product.objects.all()
+    goods = Product.objects.all()
 
     context = {
         'title': 'Catalog',
-        'goods': products
+        'goods': goods
     }
 
     return render(request, 'goods/catalog.html', context)

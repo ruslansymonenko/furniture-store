@@ -4,7 +4,9 @@ from django.shortcuts import render, get_object_or_404
 from goods.models import Product
 
 
-def catalog(request, category_slug, page=1):
+def catalog(request, category_slug):
+    page = request.GET.get('page', 1)
+
     if category_slug == 'all-goods':
         goods = Product.objects.all()
     else:

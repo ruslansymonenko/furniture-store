@@ -1,28 +1,30 @@
 <nav aria-label="page navigation">
-    <ul class="pagination justify-content-center my-4">
-        <div class="custom-shadow d-flex">
-            <li class="page-item {% if not page_objects.has_previous %} disabled {% endif %}">
-              <a class="page-link text-dark" href="{% if page_objects.has_previous %}
-              {% url page_url_name slug_url page_objects.previous_page_number %}
-              {% else %} # {% endif %}">Previous</a>
-            </li>
+    <ul class="pagination justify-content-center my-4 d-flex">
+        <li class="page-item {% if not page_objects.has_previous %} disabled {% endif %}">
+          <a class="page-link text-dark" href="{% if page_objects.has_previous %}
+          ?page={{ goods.previous_page_number }}
+          {% else %} # {% endif %}">
+              Previous
+          </a>
+        </li>
 
-            {% for page in page_objects.paginator.page_range %}
-                {% if page >= goods.number|add:-2 and page <= goods.number|add:+2 %}
-                    <li class="page-item">
-                        <a class="page-link text-dark {% if page_objects.number == page %} bg-info text-white {% endif %}"
-                           href="{% url page_url_name slug_url page %}">
-                            {{ page }}
-                        </a>
-                    </li>
-                {% endif %}
-            {% endfor %}
+        {% for page in page_objects.paginator.page_range %}
+            {% if page >= goods.number|add:-2 and page <= goods.number|add:+2 %}
+                <li class="page-item">
+                    <a class="page-link text-dark {% if page_objects.number == page %} bg-info text-white {% endif %}"
+                       href="?page={{ page }}">
+                        {{ page }}
+                    </a>
+                </li>
+            {% endif %}
+        {% endfor %}
 
-            <li class="page-item {% if not page_objects.has_next %} disabled {% endif %}">
-              <a class="page-link text-dark" href="{% if page_objects.has_next %}
-              {% url page_url_name slug_url page_objects.next_page_number %}
-              {% else %} # {% endif %}">Next</a>
-            </li>
-        </div>
+        <li class="page-item {% if not page_objects.has_next %} disabled {% endif %}">
+          <a class="page-link text-dark" href="{% if page_objects.has_next %}
+          ?page={{ goods.next_page_number }}
+          {% else %} # {% endif %}">
+              Next
+          </a>
+        </li>
     </ul>
 </nav>

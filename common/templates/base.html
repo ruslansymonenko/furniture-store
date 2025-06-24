@@ -1,0 +1,82 @@
+{% load static %}
+{% load goods_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static "deps/css/bootstrap/bootstrap.min.css" %}">
+    <link rel="stylesheet" href="{% static "deps/css/my_css.css" %}">
+    <link rel="stylesheet" href="{% static "deps/css/my_footer_css.css" %}">
+
+    {% block css %}
+
+    {% endblock %}
+    <!-- Favicons for different platforms -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static "deps/favicon/apple-touch-icon.png" %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static "deps/favicon/favicon-32x32.png" %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static "deps/favicon/favicon-16x16.png" %}">
+    <link rel="manifest" href="{% static "deps/favicon/site.webmanifest" %}">
+    <title>{{ title }}</title>
+</head>
+
+<body class="min-vh-100">
+    {% include "includes/header.html"%}
+
+    <main class="flex-grow-1">
+        <div class="container">
+            <div class="row mt-1 position-fixed z-3">
+                <div class="dropdown mb-2">
+                    <button class="btn btn-secondary dropdown-toggle btn-dark" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        Catalogue
+                        <img class="mx-1" src="{% static "deps/icons/grid-fill.svg" %}" alt="Catalog Icon" width="16"
+                            height="16">
+                    </button>
+                    <ul class="dropdown-menu bg-dark" data-bs-theme="dark">
+                        {% get_categories as categories %}
+                        {% for category in categories %}
+                            <li><a class="dropdown-item text-white" href={% url 'goods:catalog' category.slug %}>{{ category.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <div>
+                    <button type="button" class="btn btn-dark btn-secondary d-flex" id="modalButton"
+                        aria-expanded="false">
+                        <img class="mx-1" src="{% static "deps/icons/basket2-fill.svg" %}" alt="Catalog Icon" width="24"
+                            height="24">
+                        <span id="goods-in-cart-count">0</span>
+                    </button>
+                </div>
+
+                {% include "includes/cart_modal.html"%}
+
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row mt-1">
+                <div class="col-lg-2">
+
+                </div>
+                <div class="col-lg-10">
+                    {% block content %}
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+    </main>
+
+    {% include "includes/footer.html"%}
+
+    <script src="{% static "deps/js/jquery/jquery-3.7.0.min.js" %}"></script>
+    <script src="{% static "deps/js/jquery-events.js" %}"></script>
+    <script src="{% static "deps/js/jquery-ajax.js" %}"></script>
+    <script src="{% static "deps/js/bootstrap/bootstrap.bundle.min.js" %}"></script>
+</body>
+
+</html>

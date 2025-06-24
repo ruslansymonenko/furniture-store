@@ -2,7 +2,6 @@
 {% load static %}
 
 {% block css %}
-    <link rel="stylesheet" href="{% static "deps/css/my_footer_css.css" %}">
 {% endblock %}
 
 {% block content %}
@@ -12,12 +11,4 @@
             <img class="mx-1 rounded custom-shadow" src="{% static "deps/images/furniture.jpg" %}" alt="store">
         </div>
     </div>
-{% endblock %}
-
-{% block footer %}
-    <footer class="py-4 bg-dark">
-        <div class="container">
-            <p class="m-0 text-center text-white">Furniture Store</p>
-        </div>
-    </footer>
 {% endblock %}

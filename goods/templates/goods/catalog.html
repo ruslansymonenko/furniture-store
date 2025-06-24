@@ -11,10 +11,16 @@
                 {% include "includes/sort.html" %}
 
                 <!-- goods -->
+                {% if request.GET.q %}
+                    <div class="mt-5 bg-white custom-shadow p-2 d-flex align-items-center justify-content-center fw-bold">
+                        <p>Search Results</p>
+                    </div>
+                {% endif %}
+
                 {% for product in goods %}
                     {% include "includes/product_card.html" with product=product %}
                 {% empty %}
-                    <div class="mt-5 bg-white custom-shadow p-2 rounded">
+                    <div class="mt-5 bg-white custom-shadow p-2 rounded d-flex align-items-center justify-content-center" style="height: 150px;">
                         <p>No products found</p>
                     </div>
                 {% endfor %}

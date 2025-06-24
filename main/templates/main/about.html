@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block css %}
-    <link rel="stylesheet" href="{% static "deps/css/my_footer_css.css" %}">
+
 {% endblock %}
 
 {% block content %}
@@ -11,12 +11,4 @@
         <h2><strong>{{ content }}</strong></h2>
         <p>{{ text_on_page }}</p>
     </div>
-{% endblock %}
-
-{% block footer %}
-    <footer class="py-4 bg-dark">
-        <div class="container">
-            <p class="m-0 text-center text-white">Furniture Store</p>
-        </div>
-    </footer>
 {% endblock %}

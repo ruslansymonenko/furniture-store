@@ -10,6 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static "deps/css/bootstrap/bootstrap.min.css" %}">
     <link rel="stylesheet" href="{% static "deps/css/my_css.css" %}">
+    <link rel="stylesheet" href="{% static "deps/css/my_footer_css.css" %}">
 
     {% block css %}
 
@@ -22,7 +23,7 @@
     <title>{{ title }}</title>
 </head>
 
-<body>
+<body class="min-vh-100">
     <header>
         <nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
             <div class="container">
@@ -74,7 +75,7 @@
             </div>
         </nav>
     </header>
-    <section>
+    <main class="flex-grow-1">
         <div class="container">
             <div class="row mt-1 position-fixed z-3">
                 <div class="dropdown mb-2">
@@ -176,10 +177,10 @@
                 </div>
             </div>
         </div>
-    </section>
-    {% block footer %}
-    	
-    {% endblock %}
+    </main>
+
+    {% include "includes/footer.html" with page_objects=goods page_url_name='goods:catalog' slug_url=slug_url %}
+
     <script src="{% static "deps/js/jquery/jquery-3.7.0.min.js" %}"></script>
     <script src="{% static "deps/js/jquery-events.js" %}"></script>
     <script src="{% static "deps/js/jquery-ajax.js" %}"></script>

@@ -60,3 +60,15 @@ body {
 .card-text {
     font-size: 0.875rem;
 }
+
+.sale-badge {
+    background-color: #ffeaa7;
+    color: #212529;;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+}

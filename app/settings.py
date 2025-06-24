@@ -55,6 +55,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                'common.context_processors.currency',
             ],
         },
     },
@@ -94,6 +96,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 
 LANGUAGE_CODE = 'en-us'
+CURRENCY = "$"
 
 TIME_ZONE = 'UTC'
 

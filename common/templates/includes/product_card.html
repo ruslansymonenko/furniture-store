@@ -1,6 +1,6 @@
 {% load static %}
 
-<div class="col-lg-4 col-md-6 g-4" aria-label="product-card">
+<div class="col-lg-4 col-md-6 g-4 position-relative" aria-label="product-card">
     <div class="card rounded custom-shadow p-2 custom-card d-flex flex-column">
         {% if product.image %}
             <img src="{{ product.image.url }}" class="card-img-top" alt={{ product.name }}>
@@ -13,17 +13,19 @@
             </a>
             <p class="card-text text-truncate">{{ product.description }}</p>
             <p class="product_id">Product code: {{ product.display_id }}</p>
-            <div class="d-flex justify-content-between mt-auto">
+            <div class="d-flex justify-content-between align-items-center mt-auto">
                 {% if product.discount %}
-                    <p><s>{{ product.price }}</s> $</p>
-                    <p><strong>{{ product.sell_price }} $</strong></p>
-                    <span class="badge bg-warning text-dark">Discount: {{ product.discount }} %</span>
+                    <div class="flex-column d-flex justify-content-center align-items-center">
+                        <p class="mb-0"><s>{{ product.price }}</s> $</p>
+                        <p class="mb-0"><strong>{{ product.sell_price }} $</strong></p>
+                        <span class="badge sale-badge">Discount: {{ product.discount }} %</span>
+                    </div>
                 {% else %}
-                    <p><strong>{{ product.price }} $</strong></p>
+                    <p class="mb-0"><strong>{{ product.price }} {{ CURRENCY }}</strong></p>
                 {% endif %}
 
                 <a href="#" class="btn add-to-cart">
-                    <img class="mx-1" src="{% static 'deps/icons/cart-plus.svg' %}" alt="Catalog Icon" width="32" height="32">
+                    <img class="mx-1" src="{% static 'deps/icons/cart.svg' %}" alt="Catalog Icon" width="32" height="32">
                 </a>
             </div>
         </div>

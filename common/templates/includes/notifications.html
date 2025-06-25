@@ -11,7 +11,7 @@
 
 
 {% if messages %}
-<div class="position-fixed top-2 end-0 p-3" style="z-index: 1050; width: 450px;">
+<div class="position-fixed top-2 end-0 p-3" style="z-index: 1050; width: 450px;" id="notification">
     {% for message in messages %}
         {% if message.tags == 'success' %}
             <div class="alert alert-success alert-dismissible fade show custom-shadow" role="alert">

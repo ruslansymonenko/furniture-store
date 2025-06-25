@@ -28,7 +28,7 @@ INSTALLED_APPS = [
 
     'main',
     'goods',
-    'user'
+    'user',
 ]
 
 MIDDLEWARE = [
@@ -80,6 +80,7 @@ DATABASES = {
     }
 }
 
+AUTH_USER_MODEL = 'user.User'
 
 # Password validation
 

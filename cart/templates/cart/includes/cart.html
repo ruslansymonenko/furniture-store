@@ -35,7 +35,7 @@
                             </div>
                             <div class="col p-0"><strong>{{ cart_products.products_price }} {{ CURRENCY }}</strong></div>
                             <div class="col p-0">
-                                <a href={% url 'cart:cart_remove' 1 %} class="remove-from-cart" data-cart-id="">
+                                <a href={% url 'cart:cart_remove' %} class="remove-from-cart" data-cart-id="">
                                     <img class="mx-1" src="{% static "deps/icons/trash3-fill.svg" %}"
                                         alt="Catalog Icon" width="16" height="16">
                                 </a>
@@ -54,7 +54,9 @@
             </div>
         </div>
     </div>
-    <a class="btn btn-dark" href="orders/create_order.html">
-        Place order
-    </a>
+    {% if cart %}
+        <a class="btn btn-dark" href="orders/create_order.html">
+            Place order
+        </a>
+    {% endif %}
 </div>

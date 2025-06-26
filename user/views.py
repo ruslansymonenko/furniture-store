@@ -3,7 +3,6 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from django.views.decorators.csrf import csrf_exempt
 
 from user.forms import UserLoginForm, UserRegistrationForm, UserUpdateForm
 
@@ -21,6 +20,9 @@ def login(request):
             if user:
                 auth.login(request, user)
                 messages.success(request, 'You are now logged in.')
+
+                if request.POST.get('next', None):
+                    return HttpResponseRedirect(request.POST.get('next'))
 
                 return HttpResponseRedirect(reverse('main:home'))
     else:
@@ -84,3 +86,5 @@ def logout(request):
 
     return redirect(reverse('main:home'))
 
+def user_cart(request):
+    return render(request, 'user/user-cart.html')

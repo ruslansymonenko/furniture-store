@@ -18,7 +18,7 @@
                 {% endif %}
 
                 {% for product in goods %}
-                    {% include "includes/product_card.html" with product=product %}
+                    {% include "goods/includes/product_card.html" with product=product %}
                 {% empty %}
                     <div class="mt-5 bg-white custom-shadow p-2 rounded d-flex align-items-center justify-content-center" style="height: 150px;">
                         <p>No products found</p>

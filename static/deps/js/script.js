@@ -9,12 +9,14 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     const modalButton = document.getElementById('modalButton');
-    const modalElement = document.getElementById('exampleModal');
+    const modalElement = document.getElementById('modalWindow');
 
     if (modalButton && modalElement) {
+        console.log('yes');
         const bootstrapModal = new bootstrap.Modal(modalElement);
 
         modalButton.addEventListener('click', function () {
+            console.log('click');
             document.body.appendChild(modalElement);
             bootstrapModal.show();
         });

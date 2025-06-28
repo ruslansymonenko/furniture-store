@@ -23,16 +23,14 @@
                             <div class="col p-0">
                                 <div class="input-group d-flex align-items-center justify-content-center">
                                     <span class="input-group-btn">
-                                        <button type="button" class="btn btn-dark btn-sm decrement" style="width: 50px;"
-                                            data-cart-id="" data-cart-change-url="">-</button>
+                                        <button type="button" class="btn btn-dark btn-sm decrement" style="width: 50px;" data-cart-id="{{ cart_products.id }}" data-cart-change-url="{% url 'cart:cart_change' %}">{% csrf_token %} -</button>
                                     </span>
                                     <div style="flex: none; margin: 0 5px;">
                                         <input type="text" class="form-control number m-1 rounded"
                                                style="width: 50px;" value="{{ cart_products.quantity }}" readonly>
                                     </div>
                                     <span class="input-group-btn">
-                                        <button type="button" class="btn btn-dark btn-sm increment" style="width: 50px;"
-                                            data-cart-id="" data-cart-change-url="">+</button>
+                                        <button type="button" class="btn btn-dark btn-sm increment" style="width: 50px;" data-cart-id="{{ cart_products.id }}" data-cart-change-url="{% url 'cart:cart_change' %}">{% csrf_token %} +</button>
                                     </span>
                                 </div>
                             </div>

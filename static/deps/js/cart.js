@@ -49,7 +49,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
             $("#cart-items-container").html(newContent);
         })
-        .catch((e) => console.log(`Error while adding product to cart, ${e}`));
+        .catch((e) => {
+            showError('Error while adding product to cart')
+            console.log(`Error while adding product to cart, ${e}`)
+        });
     }
 
     function removeFromCart(button) {
@@ -74,7 +77,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
             $("#cart-items-container").html(newContent);
         })
-        .catch((e) => console.log(`Product delete error, ${e}`));
+        .catch((e) => {
+            showError('Product delete error')
+            console.log(`Product delete error`)
+        });
     }
 
     function updateCart(cartID, quantity, change, url) {
@@ -99,7 +105,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
             $("#cart-items-container").html(newContent);
         })
-        .catch(() => console.log("Error updating error"));
+        .catch((e) => {
+            showError("Error updating error")
+            console.log(`Error updating error ${e}`)
+        });
     }
 
     function decreaseQuantity(button) {

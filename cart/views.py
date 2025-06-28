@@ -57,5 +57,24 @@ def cart_remove(request):
 
     return  JsonResponse(response_data)
 
-def cart_change(request, product_slug):
-    ...
+def cart_change(request):
+    cart_id = request.POST.get('cart_id')
+    quantity = request.POST.get('quantity')
+
+    cart = Cart.objects.get(id=cart_id)
+    cart.quantity = int(quantity)
+
+    cart.save()
+
+    user_cart = get_user_cart(request)
+    cart_item_html = render_to_string(
+        "cart/includes/cart.html", {'cart': user_cart}, request=request
+    )
+
+    response_data = {
+        'message': SUCCESS_MESSAGES['cart_updated'],
+        "cart_item_html": cart_item_html,
+        "quantity_deleted": quantity,
+    }
+
+    return  JsonResponse(response_data)

@@ -23,6 +23,17 @@ def cart_add(request):
         else:
             Cart.objects.create(user=request.user, product=product, quantity=1)
 
+    else:
+        cart = Cart.objects.filter(session_key=request.session.session_key, product=product)
+
+        if cart.exists():
+            cart = cart.first()
+
+            if cart:
+                cart.quantity += 1
+                cart.save()
+        else:
+            Cart.objects.create(session_key=request.session.session_key, product=product, quantity=1)
 
     user_cart = get_user_cart(request)
     cart_item_html = render_to_string(

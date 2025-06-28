@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 
 from app.messages import SUCCESS_MESSAGES
+from cart.models import Cart
 from user.forms import UserLoginForm, UserRegistrationForm, UserUpdateForm
 
 
@@ -17,9 +18,14 @@ def login(request):
             password = form.cleaned_data['password']
             user = auth.authenticate(username=username, password=password)
 
+            session_key = request.session.session_key
+
             if user:
                 auth.login(request, user)
                 messages.success(request, SUCCESS_MESSAGES['login_success'])
+
+                if session_key:
+                    Cart.objects.filter(session_key=session_key).update(user=user)
 
                 redirect_page = request.GET.get('next', None)
 
@@ -41,9 +47,14 @@ def registration(request):
     if request.method == 'POST':
         form = UserRegistrationForm(data=request.POST)
 
+        session_key = request.session.session_key
+
         if form.is_valid():
             form.save()
             user = form.instance
+
+            if session_key:
+                Cart.objects.filter(session_key=session_key).update(user=user)
 
             auth.login(request, user)
             messages.success(request, SUCCESS_MESSAGES['register_success'])

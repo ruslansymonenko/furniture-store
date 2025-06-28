@@ -22,8 +22,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const modalCloseBtn = modalElement.querySelector('.btn-close');
         if (modalCloseBtn) {
             modalCloseBtn.addEventListener('click', function () {
-                document.activeElement.blur();
+                // document.activeElement.blur();
                 bootstrapModal.hide();
+                modalButton.focus();
             });
         }
     }
@@ -43,3 +44,4 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
+

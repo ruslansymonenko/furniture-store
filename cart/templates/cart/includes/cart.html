@@ -5,6 +5,12 @@
 
 <div class="bg-white w-auto rounded p-4 d-flex flex-column align-items-center justify-content-center">
     <h3 class="text-center mb-4">Cart</h3>
+    {% if request.path == '/user/user-cart/' %}
+        <div class="mb-2 d-flex">
+            <h4>Total goods:</h4>
+            <h4 id="goods-in-cart-count">{{ cart.total_quantity }}</h4>
+        </div>
+    {% endif %}
     <div class="container" id="cart-items-container">
         {% for cart_products in cart %}
             <div class="card mb-3 text-bg-light shadow-lg">
@@ -35,7 +41,8 @@
                             </div>
                             <div class="col p-0"><strong>{{ cart_products.products_price }} {{ CURRENCY }}</strong></div>
                             <div class="col p-0">
-                                <a href={% url 'cart:cart_remove' %} class="remove-from-cart" data-cart-id="">
+                                <a href="{% url 'cart:cart_remove' %}" class="remove-from-cart" data-cart-id={{ cart_products.id }}>
+                                    {% csrf_token %}
                                     <img class="mx-1" src="{% static "deps/icons/trash3-fill.svg" %}"
                                         alt="Catalog Icon" width="16" height="16">
                                 </a>

@@ -28,11 +28,13 @@
     <main class="flex-grow-1 position-relative">
         {% include "includes/notifications.html" %}
 
-        <div class="container">
-            <div class="row mt-1 position-fixed z-3">
-                {% include "cart/includes/cart_modal.html"%}
+        {% if request.path != '/user/user-cart/' %}
+            <div class="container">
+                <div class="row mt-1 position-fixed z-3">
+                    {% include "cart/includes/cart_modal.html" %}
+                </div>
             </div>
-        </div>
+        {% endif %}
 
         <div class="container">
             <div class="d-flex align-items-center justify-content-center mt-1">
@@ -45,6 +47,7 @@
 
     {% include "includes/footer.html"%}
 
+    <script src="{% static 'deps/js/jquery/jquery-3.7.0.min.js' %}"></script>
     <script src="{% static "deps/js/script.js" %}"></script>
     <script src="{% static "deps/js/cart.js" %}"></script>
     <script src="{% static "deps/js/bootstrap/bootstrap.bundle.min.js" %}"></script>

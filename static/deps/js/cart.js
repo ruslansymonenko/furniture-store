@@ -44,9 +44,10 @@ document.addEventListener('DOMContentLoaded', function () {
             showSuccess(data.message);
             updateCartCount(1);
 
-            console.log(data.message);
+            const htmlWrapper = $("<div>").html(data.cart_item_html);
+            const newContent = htmlWrapper.find("#cart-items-container").html();
 
-            document.getElementById("cart-items-container").innerHTML = data.cart_item_html;
+            $("#cart-items-container").html(newContent);
         })
         .catch((e) => console.log(`Error while adding product to cart, ${e}`));
     }
@@ -68,9 +69,12 @@ document.addEventListener('DOMContentLoaded', function () {
             showSuccess(data.message);
             updateCartCount(-data.quantity_deleted);
 
-            document.getElementById("cart-items-container").innerHTML = data.cart_items_html;
+            const htmlWrapper = $("<div>").html(data.cart_item_html);
+            const newContent = htmlWrapper.find("#cart-items-container").html();
+
+            $("#cart-items-container").html(newContent);
         })
-        .catch(() => console.log("Product delete error"));
+        .catch((e) => console.log(`Product delete error, ${e}`));
     }
 
     function updateCart(cartID, quantity, change, url) {
@@ -89,7 +93,11 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(data => {
             showSuccess(data.message);
             updateCartCount(change);
-            document.getElementById("cart-items-container").innerHTML = data.cart_items_html;
+
+            const htmlWrapper = $("<div>").html(data.cart_item_html);
+            const newContent = htmlWrapper.find("#cart-items-container").html();
+
+            $("#cart-items-container").html(newContent);
         })
         .catch(() => console.log("Error updating error"));
     }

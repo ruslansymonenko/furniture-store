@@ -5,7 +5,7 @@
 
 <div class="bg-white w-auto rounded p-4 d-flex flex-column align-items-center justify-content-center">
     <h3 class="text-center mb-4">Cart</h3>
-    {% if request.path == '/user/user-cart/' or request.path == '/orders/create-order/' %}
+    {% if request.path == '/user/user-cart/' or request.path == '/orders/create-order/' or request.path == '/user/profile/' %}
         <div class="mb-2 d-flex">
             <h4 class="me-2">Total goods:</h4>
             <h4 id="goods-in-cart-count">{{ cart.total_quantity }}</h4>

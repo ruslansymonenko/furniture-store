@@ -29,7 +29,7 @@
     <main class="flex-grow-1 position-relative">
         {% include "includes/notifications.html" %}
 
-        {% if request.path != '/user/user-cart/' and request.path != '/orders/create-order/' %}
+        {% if request.path != '/user/user-cart/' and request.path != '/orders/create-order/' and request.path != '/user/profile/' %}
             <div class="container">
                 <div class="row mt-1 position-fixed z-3">
                     {% include "cart/includes/cart_modal.html" %}

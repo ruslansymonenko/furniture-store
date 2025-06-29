@@ -16,57 +16,36 @@
                                         <div class="col-md-6 mb-3">
                                             <label for="id_first_name" class="form-label">Name*</label>
                                             <input type="text" class="form-control" id="id_first_name" name="first_name"
-                                                placeholder="Name" required>
-                                            {% if form.first_name.errors %}
-                                                <div class="alert alert-danger alert-dismissible fade show mt-1">{{ form.first_name.errors }}</div>
-                                            {% endif %}
+                                                placeholder="Name" required value="{% if form.first_name.value %}{{ form.first_name.value }}{% endif %}">
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <label for="id_last_name" class="form-label">Surname*</label>
                                             <input type="text" class="form-control" id="id_last_name" name="last_name"
-                                                placeholder="Surname" required>
-                                            {% if form.last_name.errors %}
-                                                <div class="alert alert-danger alert-dismissible fade show mt-1">{{ form.last_name.errors }}</div>
-                                            {% endif %}
+                                                placeholder="Surname" required value="{% if form.last_name.value %}{{ form.last_name.value }}{% endif %}">
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <label for="id_username" class="form-label">Username*</label>
                                             <input type="text" class="form-control" id="id_username" name="username"
-                                                placeholder="Username" required>
-                                            {% if form.username.errors %}
-                                                <div class="alert alert-danger alert-dismissible fade show mt-1">{{ form.username.errors }}</div>
-                                            {% endif %}
+                                                placeholder="Username" required value="{% if form.username.value %}{{ form.username.value }}{% endif %}">
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <label for="id_email" class="form-label">Email*</label>
                                             <input type="email" class="form-control" id="id_email" name="email"
-                                                placeholder="Email" required>
-                                            {% if form.email.errors %}
-                                                <div class="alert alert-danger alert-dismissible fade show mt-1">{{ form.email.errors }}</div>
-                                            {% endif %}
+                                                placeholder="Email" required value="{% if form.email.value %}{{ form.email.value }}{% endif %}">
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <label for="id_phone" class="form-label">Phone*</label>
-                                            <input type="text" class="form-control" id="id_phone" name="phone" placeholder="Phone">
-                                            {% if form.phone.errors %}
-                                                <div class="alert alert-danger alert-dismissible fade show mt-1">{{ form.phone.errors }}</div>
-                                            {% endif %}
+                                            <input type="text" class="form-control" id="id_phone" name="phone" placeholder="Phone" value="{% if form.phone.value %}{{ form.phone.value }}{% endif %}">
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <label for="id_password1" class="form-label">Password*</label>
                                             <input type="password" class="form-control" id="id_password1" name="password1"
                                                 placeholder="Password" required>
-                                            {% if form.password1.errors %}
-                                                <div class="alert alert-danger alert-dismissible fade show mt-1">{{ form.password1.errors }}</div>
-                                            {% endif %}
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <label for="id_password2" class="form-label">Confirm Password*</label>
                                             <input type="password" class="form-control" id="id_password2" name="password2"
                                                 placeholder="Confirm password" required>
-                                            {% if form.password2.errors %}
-                                                <div class="alert alert-danger alert-dismissible fade show mt-1">{{ form.password2.errors }}</div>
-                                            {% endif %}
                                         </div>
                                     </div>
                                     <button type="submit"

@@ -1,33 +1,19 @@
-{% load static %}
-
-{% if form.non_field_errors %}
-    <div class="position-fixed top-2 end-0 p-3" style="z-index: 1050; width: 450px;">
-        <div class="alert alert-danger alert-dismissible fade show custom-shadow" role="alert">
-            {{ form.non_field_errors }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    </div>
-{% endif %}
-
-
-{% if messages %}
-<div class="position-fixed top-2 end-0 p-3" style="z-index: 1050; width: 450px;" id="notification">
-    {% for message in messages %}
-        {% if message.tags == 'success' %}
-            <div class="alert alert-success alert-dismissible fade show custom-shadow" role="alert">
-                {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        {% elif message.tags == 'warning' %}
-            <div class="alert alert-danger alert-dismissible fade show custom-shadow" role="alert">
-                {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        {% endif %}
-    {% endfor %}
-</div>
-{% endif %}
-
-<div class="position-fixed top-2 end-0 p-3" style="z-index: 1050; width: 450px;" id="notification">
-
-</div>
+{#{% load static %}#}
+{##}
+{#<div class="position-fixed top-2 end-0 p-3" style="z-index: 1050; width: 450px;" id="notification">#}
+{#    {% if messages %}#}
+{#        {% for message in messages %}#}
+{#            {% if message.tags == 'success' %}#}
+{#                <div class="alert alert-success alert-dismissible fade show custom-shadow" role="alert">#}
+{#                    {{ message }}#}
+{#                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>#}
+{#                </div>#}
+{#            {% elif message.tags == 'warning' %}#}
+{#                <div class="alert alert-danger alert-dismissible fade show custom-shadow" role="alert">#}
+{#                    {{ message }}#}
+{#                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>#}
+{#                </div>#}
+{#            {% endif %}#}
+{#        {% endfor %}#}
+{#    {% endif %}#}
+{#</div>#}

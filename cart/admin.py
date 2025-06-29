@@ -20,7 +20,7 @@ class CartAdmin(admin.ModelAdmin):
             return str(obj.user.username)
         return 'Unknown User'
 
-    @admin.display(description='User')
+    @admin.display(description='Product')
     def product_display(self, obj):
         return str(obj.product.name)
 

@@ -33,6 +33,12 @@ def login(request):
                     return HttpResponseRedirect(request.POST.get('next'))
 
                 return HttpResponseRedirect(reverse('main:home'))
+
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field.capitalize()}: {error}")
+
     else:
         form = UserLoginForm()
 
@@ -61,6 +67,11 @@ def registration(request):
 
             return HttpResponseRedirect(reverse('main:home'))
 
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field.capitalize()}: {error}")
+
     else:
         form = UserRegistrationForm()
 
@@ -81,6 +92,10 @@ def profile(request):
             messages.success(request, SUCCESS_MESSAGES['profile_update_success'])
 
             return HttpResponseRedirect(reverse('user:profile'))
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field.capitalize()}: {error}")
 
     else:
         form = UserUpdateForm(instance=request.user)

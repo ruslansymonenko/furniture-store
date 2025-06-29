@@ -5,9 +5,9 @@
 
 <div class="bg-white w-auto rounded p-4 d-flex flex-column align-items-center justify-content-center">
     <h3 class="text-center mb-4">Cart</h3>
-    {% if request.path == '/user/user-cart/' %}
+    {% if request.path == '/user/user-cart/' or request.path == '/orders/create-order/' %}
         <div class="mb-2 d-flex">
-            <h4>Total goods:</h4>
+            <h4 class="me-2">Total goods:</h4>
             <h4 id="goods-in-cart-count">{{ cart.total_quantity }}</h4>
         </div>
     {% endif %}
@@ -15,7 +15,17 @@
         {% for cart_products in cart %}
             <div class="card mb-3 text-bg-light shadow-lg">
                 <div class="card-header">
-                    <h5 class="card-title">{{ cart_products.product.name }}</h5>
+                    <a class="text-dark fw-bold text-decoration-none" href="{% url 'goods:product' cart_products.product.slug %}">
+                        <p class="card-title">
+                            {% autoescape off %}
+                                {% if cart_products.product.headline %}
+                                    {{ cart_products.product.headline}}
+                                {% else %}
+                                    {{ cart_products.product.name|truncatechars:25 }}
+                                {% endif %}
+                            {% endautoescape %}
+                        </p>
+                    </a>
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
@@ -59,9 +69,12 @@
             </div>
         </div>
     </div>
-    {% if cart %}
-        <a class="btn btn-dark" href="orders/create_order.html">
-            Place order
-        </a>
+    {% if request.path != '/orders/create-order/' %}
+        {% if cart %}
+            <a class="btn btn-dark" href="{% url 'orders:create_order' %}">
+                Place order
+            </a>
+        {% endif %}
     {% endif %}
+
 </div>

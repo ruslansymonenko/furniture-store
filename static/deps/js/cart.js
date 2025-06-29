@@ -75,6 +75,11 @@ document.addEventListener('DOMContentLoaded', function () {
             const htmlWrapper = $("<div>").html(data.cart_item_html);
             const newContent = htmlWrapper.find("#cart-items-container").html();
 
+
+            if (!newContent) {
+                console.warn('❗ newContent is undefined — возможно, #cart-items-container отсутствует в HTML');
+            }
+
             $("#cart-items-container").html(newContent);
         })
         .catch((e) => {
@@ -145,47 +150,24 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function showSuccess(message) {
-        const notification = document.getElementById("notification");
-        if (!notification) return;
-
-        const alertDiv = document.createElement("div");
-        alertDiv.className = "alert alert-success alert-dismissible fade show custom-shadow";
-        alertDiv.setAttribute("role", "alert");
-
-        alertDiv.innerHTML = `
-            ${message}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        `;
-
-        notification.appendChild(alertDiv);
-
-        setTimeout(() => {
-            const bsAlert = bootstrap.Alert.getOrCreateInstance(alertDiv);
-            bsAlert.close();
-        }, 7000);
+         toastr.options = {
+            "closeButton": true,
+            "progressBar": true,
+            "positionClass": "toast-bottom-right",
+            "timeOut": "7000",
+        };
+        toastr.success(message);
     }
 
     function showError(message) {
-        const notification = document.getElementById("notification");
-        if (!notification) return;
-
-        const alertDiv = document.createElement("div");
-        alertDiv.className = "alert alert-danger alert-dismissible fade show custom-shadow";
-        alertDiv.setAttribute("role", "alert");
-
-        alertDiv.innerHTML = `
-            ${message}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        `;
-
-        notification.appendChild(alertDiv);
-
-        setTimeout(() => {
-            const bsAlert = bootstrap.Alert.getOrCreateInstance(alertDiv);
-            bsAlert.close();
-        }, 7000);
+         toastr.options = {
+            "closeButton": true,
+            "progressBar": true,
+            "positionClass": "toast-bottom-right",
+            "timeOut": "7000",
+        };
+        toastr.error(message);
     }
-
 
     function updateCartCount(change) {
         const currentCount = parseInt(goodsInCartCount.textContent || 0);

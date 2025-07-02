@@ -2,11 +2,12 @@ from django.http import Http404
 from django.views.generic import DetailView, ListView
 
 from app.constants import PAGES_NAMES
+from common.mixins import CacheMixin
 from goods.models import Product
 from goods.utils import q_search
 
 
-class CatalogView(ListView):
+class CatalogView(CacheMixin, ListView):
     model = Product
     template_name = 'goods/catalog.html'
     context_object_name = 'goods'
@@ -18,6 +19,8 @@ class CatalogView(ListView):
         on_sale = self.request.GET.get('on_sale', None)
         order_by = self.request.GET.get('order_by', None)
         query = self.request.GET.get('q', None)
+
+        cache_key = f"catalog:{category_slug}:{query}:{on_sale}:{order_by}"
 
         if category_slug == 'all-goods':
             goods = super().get_queryset()
@@ -35,7 +38,13 @@ class CatalogView(ListView):
         if order_by and order_by != 'default':
             goods = goods.order_by(order_by)
 
-        return goods
+        cached_goods = self.set_get_cache(
+            query=list(goods),
+            cache_name=cache_key,
+            cache_time=60
+        )
+
+        return cached_goods
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

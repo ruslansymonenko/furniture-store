@@ -1,37 +1,38 @@
-# Виртуальное окружение
+# ENV
 venv/
 .env
 
-# Python-кэш
+# Python cache
 __pycache__/
 *.py[cod]
 *.pyc
 
-# Локальные настройки и секреты
+# Secrets
 *.env
 local_settings.py
 *.secret
 *.key
 
-# Файлы базы данных
+# Database
 *.sqlite3
 *.db
+cache/
 
-# Медиа-файлы
+# Media
 media/
 
-# Статические файлы (собранные, если используете collectstatic)
+# Static
 staticfiles/
 
-# Логи
+# Logs
 *.log
 
-# Временные файлы редакторов
+# Temp
 *.swp
 *.swo
 *~
 
-# Файлы IDE
+# IDE
 .idea/
 .vscode/
 

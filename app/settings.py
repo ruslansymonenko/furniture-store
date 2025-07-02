@@ -83,6 +83,13 @@ DATABASES = {
     }
 }
 
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
+        "LOCATION": BASE_DIR / "cache",
+    }
+}
+
 AUTH_USER_MODEL = 'user.User'
 
 # Password validation

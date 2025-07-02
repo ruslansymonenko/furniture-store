@@ -4,13 +4,14 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.db.models import Prefetch
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, UpdateView, TemplateView
 
 from app.constants import PAGES_NAMES
 from app.messages import SUCCESS_MESSAGES
 from cart.models import Cart
+from common.mixins import CacheMixin
 from orders.models import Order, OrderItem
 from user.forms import UserLoginForm, UserRegistrationForm, UserUpdateForm
 
@@ -96,7 +97,7 @@ class UserRegistrationView(CreateView):
         return super().form_invalid(form)
 
 
-class UserProfileView(LoginRequiredMixin, UpdateView):
+class UserProfileView(LoginRequiredMixin, CacheMixin, UpdateView):
     template_name = 'user/profile.html'
     form_class = UserUpdateForm
     success_url = reverse_lazy('user:profile')
@@ -112,17 +113,19 @@ class UserProfileView(LoginRequiredMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         orders = (
             Order.objects.filter(user=self.request.user)
-                .prefetch_related(
-                    Prefetch(
-                        "orderitem_set",
-                        queryset=OrderItem.objects.select_related("product")
-                    )
+            .prefetch_related(
+                Prefetch(
+                    "orderitem_set",
+                    queryset=OrderItem.objects.select_related("product")
                 )
-                .order_by('-id')
+            )
+            .order_by('-id')
         )
+        cached_orders = self.set_get_cache(orders, f'user_{self.request.user.id}_orders', 60 * 2)
+
 
         context['title'] = PAGES_NAMES['user_profile_page']
-        context['orders'] = orders
+        context['orders'] = cached_orders
         return context
 
     def form_invalid(self, form):

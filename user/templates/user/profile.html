@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load cache %}
 
 {% block content %}
 <div class="container">
@@ -20,7 +21,7 @@
                     </div>
                     <!-- Orders-->
                     <div class="row">
-                        {% include 'user/includes/user-orders.html' with orders=orders %}
+                        {% include "user/includes/user-orders.html" with orders=orders %}
                     </div>
                 </div>
             </div>

@@ -1,6 +1,7 @@
 {% load static %}
 {% load goods_tags %}
 {% load cart_tags %}
+{% load cache %}
 
 {% user_cart request as cart %}
 
@@ -23,10 +24,12 @@
                                 height="16">
                         </button>
                         <ul class="dropdown-menu bg-dark" data-bs-theme="dark">
-                            {% get_categories as categories %}
-                            {% for category in categories %}
-                                <li><a class="dropdown-item text-white" href={% url 'goods:catalog' category.slug %}>{{ category.name }}</a></li>
-                            {% endfor %}
+                            {% cache 60 catalog_categories %}
+                                {% get_categories as categories %}
+                                {% for category in categories %}
+                                    <li><a class="dropdown-item text-white" href={% url 'goods:catalog' category.slug %}>{{ category.name }}</a></li>
+                                {% endfor %}
+                            {% endcache %}
                         </ul>
                     </li>
                     <li class="nav-item dropdown ">

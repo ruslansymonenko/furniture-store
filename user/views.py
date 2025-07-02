@@ -1,11 +1,12 @@
 from django.contrib import auth, messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.db.models import Prefetch
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
-from django.views.generic import CreateView
+from django.views.generic import CreateView, UpdateView, TemplateView
 
 from app.constants import PAGES_NAMES
 from app.messages import SUCCESS_MESSAGES
@@ -75,7 +76,7 @@ class UserRegistrationView(CreateView):
                 Cart.objects.filter(session_key=session_key).update(user=user)
 
             messages.success(self.request, SUCCESS_MESSAGES['register_success'])
-            return HttpResponseRedirect(reverse('main:profile'))
+            return HttpResponseRedirect(reverse('user:profile'))
 
         else:
             return super().form_invalid(form)
@@ -94,42 +95,51 @@ class UserRegistrationView(CreateView):
                 messages.error(self.request, f"Validation error: {error}")
         return super().form_invalid(form)
 
-@login_required
-def profile(request):
-    if request.method == 'POST':
-        form = UserUpdateForm(data=request.POST, instance=request.user, files=request.FILES)
 
-        if form.is_valid():
-            form.save()
-            messages.success(request, SUCCESS_MESSAGES['profile_update_success'])
+class UserProfileView(LoginRequiredMixin, UpdateView):
+    template_name = 'user/profile.html'
+    form_class = UserUpdateForm
+    success_url = reverse_lazy('user:profile')
 
-            return HttpResponseRedirect(reverse('user:profile'))
-        else:
-            for field, errors in form.errors.items():
-                for error in errors:
-                    messages.error(request, f"{field.capitalize()}: {error}")
+    def get_object(self, queryset=None):
+        return self.request.user
 
-    else:
-        form = UserUpdateForm(instance=request.user)
+    def form_valid(self, form):
+        messages.success(self.request, SUCCESS_MESSAGES['profile_update_success'])
+        return super().form_valid(form)
 
-    orders = (
-        Order.objects.filter(user=request.user)
-            .prefetch_related(
-                Prefetch(
-                    "orderitem_set",
-                    queryset=OrderItem.objects.select_related("product")
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        orders = (
+            Order.objects.filter(user=self.request.user)
+                .prefetch_related(
+                    Prefetch(
+                        "orderitem_set",
+                        queryset=OrderItem.objects.select_related("product")
+                    )
                 )
-            )
-            .order_by('-id')
-    )
+                .order_by('-id')
+        )
 
-    context = {
-        'title': 'profile',
-        'form': form,
-        'orders': orders,
-    }
+        context['title'] = PAGES_NAMES['user_profile_page']
+        context['orders'] = orders
+        return context
 
-    return render(request, 'user/profile.html', context)
+    def form_invalid(self, form):
+        for field, errors in form.errors.items():
+            for error in errors:
+                messages.error(self.request, f"Error: {error}")
+        return super().form_invalid(form)
+
+
+class UserCartView(TemplateView):
+    template_name = 'user/user-cart.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = PAGES_NAMES['cart_page']
+        return context
+
 
 @login_required
 def logout(request):
@@ -138,5 +148,5 @@ def logout(request):
 
     return redirect(reverse('main:home'))
 
-def user_cart(request):
-    return render(request, 'user/user-cart.html')
+
+

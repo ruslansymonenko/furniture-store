@@ -1,81 +1,82 @@
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.forms import ValidationError
+from django.urls import reverse_lazy
+from django.views.generic import FormView
 
+from app.constants import PAGES_NAMES
 from app.messages import SUCCESS_MESSAGES
 from cart.models import Cart
 from orders.forms import CreateOrderForm
 from orders.models import Order, OrderItem
 
-@login_required
-def create_order(request):
-    if request.method == 'POST':
-        form = CreateOrderForm(data=request.POST)
+class CreateOrderView(LoginRequiredMixin, FormView):
+    template_name = 'orders/create-order.html'
+    form_class = CreateOrderForm
+    success_url = reverse_lazy('user:profile')
 
-        if form.is_valid():
-            try:
-                with transaction.atomic():
-                    user = request.user
-                    cart_items = Cart.objects.filter(user=user)
+    def form_valid(self, form):
+        try:
+            with transaction.atomic():
+                user = self.request.user
+                cart_items = Cart.objects.filter(user=user)
 
-                    if cart_items.exists():
-                        order = Order.objects.create(
-                            user=user,
-                            phone=form.cleaned_data['phone'],
-                            requires_delivery=form.cleaned_data['requires_delivery'],
-                            delivery_address=form.cleaned_data['delivery_address'],
-                            payment_on_get=form.cleaned_data['payment_on_get'],
+                if cart_items.exists():
+                    order = Order.objects.create(
+                        user=user,
+                        phone=form.cleaned_data['phone'],
+                        requires_delivery=form.cleaned_data['requires_delivery'],
+                        delivery_address=form.cleaned_data['delivery_address'],
+                        payment_on_get=form.cleaned_data['payment_on_get'],
+                    )
+
+                    for cart_item in cart_items:
+                        product = cart_item.product
+                        name = cart_item.product.name
+                        price = cart_item.product.sell_price()
+                        quantity = cart_item.quantity
+
+                        if product.quantity < quantity:
+                            raise ValidationError(
+                                f'The required quantity of goods is not in stock, available quantity: {product.quantity}')
+
+                        OrderItem.objects.create(
+                            order=order,
+                            product=product,
+                            name=name,
+                            price=price,
+                            quantity=quantity,
                         )
 
-                        for cart_item in cart_items:
-                            product = cart_item.product
-                            name = cart_item.product.name
-                            price = cart_item.product.sell_price()
-                            quantity = cart_item.quantity
+                        product.quantity = product.quantity - quantity
+                        product.save()
 
-                            if product.quantity < quantity:
-                                raise ValidationError(f'The required quantity of goods is not in stock, available quantity: {product.quantity}')
+                    cart_items.delete()
 
-                            OrderItem.objects.create(
-                                order=order,
-                                product=product,
-                                name=name,
-                                price=price,
-                                quantity=quantity,
-                            )
+                    messages.success(self.request, SUCCESS_MESSAGES['successful_order'])
+                    return redirect('user:profile')
 
-                            product.quantity = product.quantity - quantity
-                            product.save()
+        except ValidationError as e:
+            messages.error(self.request, str(e))
+            return redirect('order:create_order')
 
-                        cart_items.delete()
+    def get_initial(self):
+        initial = super().get_initial()
+        initial['first_name'] = self.request.user.first_name
+        initial['last_name'] = self.request.user.last_name
+        initial['phone'] = self.request.user.phone
 
-                        messages.success(request, SUCCESS_MESSAGES['successful_order'])
-                        return redirect('user:profile')
+        return initial
 
-            except ValidationError as e:
-                messages.error(request, str(e))
-                return redirect('order:create_order')
+    def form_invalid(self, form):
+        for field, errors in form.errors.items():
+            for error in errors:
+                messages.error(self.request, f"Error: {error}")
+        return redirect('order:create_order')
 
-
-        else:
-            for field, errors in form.errors.items():
-                for error in errors:
-                    messages.error(request, f"{field.capitalize()}: {error}")
-
-    else:
-        initial = {
-            'first_name': request.user.first_name,
-            'last_name': request.user.last_name,
-            'phone': request.user.phone,
-        }
-
-        form = CreateOrderForm(initial=initial)
-
-    context = {
-        'title': 'Create Order',
-        'form': form,
-    }
-
-    return render(request, 'orders/create-order.html', context=context)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = PAGES_NAMES['order_page']
+        return context

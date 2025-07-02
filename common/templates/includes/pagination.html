@@ -1,17 +1,17 @@
-{% load goods_tags %}
+{% load common_tags %}
 
 <nav aria-label="page navigation">
     <ul class="pagination justify-content-center my-4 d-flex">
         <li class="page-item {% if not page_objects.has_previous %} disabled {% endif %}">
           <a class="page-link text-dark" href="{% if page_objects.has_previous %}
-          ?{% set_url_params page=goods.previous_page_number %}
+          ?{% set_url_params page=page_objects.previous_page_number %}
           {% else %} # {% endif %}">
               Previous
           </a>
         </li>
 
         {% for page in page_objects.paginator.page_range %}
-            {% if page >= goods.number|add:-2 and page <= goods.number|add:+2 %}
+            {% if page >= page_objects.number|add:-2 and page <= page_objects.number|add:+2 %}
                 <li class="page-item">
                     <a class="page-link text-dark {% if page_objects.number == page %} bg-info text-white {% endif %}"
                        href="?{% set_url_params page=page %}">
@@ -23,7 +23,7 @@
 
         <li class="page-item {% if not page_objects.has_next %} disabled {% endif %}">
           <a class="page-link text-dark" href="{% if page_objects.has_next %}
-          ?{% set_url_params page=goods.next_page_number %}
+          ?{% set_url_params page=page_objects.next_page_number %}
           {% else %} # {% endif %}">
               Next
           </a>

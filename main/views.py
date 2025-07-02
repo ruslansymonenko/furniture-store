@@ -1,18 +1,22 @@
-from django.shortcuts import render
+from django.views.generic import TemplateView
 
-def index(request):
-    context = {
-        'title': 'Store: Home Page',
-        'content': 'Furniture Store',
-    }
+from app.constants import PAGES_NAMES
 
-    return render(request, 'main/home.html', context)
 
-def about(request):
-    context = {
-        'title': 'Store: About Page',
-        'content': 'About us',
-        'text_on_page': 'This is furniture store with best products'
-    }
+class IndexView(TemplateView):
+    template_name = 'main/home.html'
 
-    return render(request, 'main/about.html', context)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = PAGES_NAMES['home_page']
+
+        return context
+
+class AboutView(TemplateView):
+    template_name = 'main/about.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = PAGES_NAMES['about_page']
+
+        return context

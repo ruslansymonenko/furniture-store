@@ -1,88 +1,98 @@
 from django.contrib import auth, messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import LoginView
 from django.db.models import Prefetch
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
+from django.views.generic import CreateView
 
+from app.constants import PAGES_NAMES
 from app.messages import SUCCESS_MESSAGES
 from cart.models import Cart
 from orders.models import Order, OrderItem
 from user.forms import UserLoginForm, UserRegistrationForm, UserUpdateForm
 
 
-def login(request):
-    if request.method == 'POST':
-        form = UserLoginForm(data=request.POST)
+class UserLoginView(LoginView):
+    template_name = 'user/login.html'
+    form_class = UserLoginForm
 
-        if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
-            user = auth.authenticate(username=username, password=password)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = PAGES_NAMES['login_page']
+        return context
 
-            session_key = request.session.session_key
+    def form_valid(self, form):
+        session_key = self.request.session.session_key
+        user = form.get_user()
 
-            if user:
-                auth.login(request, user)
-                messages.success(request, SUCCESS_MESSAGES['login_success'])
-
-                if session_key:
-                    Cart.objects.filter(session_key=session_key).update(user=user)
-
-                redirect_page = request.GET.get('next', None)
-
-                if redirect_page and redirect_page != reverse('user:logout'):
-                    return HttpResponseRedirect(request.POST.get('next'))
-
-                return HttpResponseRedirect(reverse('main:home'))
-
-        else:
-            for field, errors in form.errors.items():
-                for error in errors:
-                    messages.error(request, f"{field.capitalize()}: {error}")
-
-    else:
-        form = UserLoginForm()
-
-    context = {
-        'title': 'Login',
-        'form': form,
-    }
-
-    return render(request, 'user/login.html', context)
-
-def registration(request):
-    if request.method == 'POST':
-        form = UserRegistrationForm(data=request.POST)
-
-        session_key = request.session.session_key
-
-        if form.is_valid():
-            form.save()
-            user = form.instance
+        if user:
+            auth.login(self.request, user)
+            messages.success(self.request, SUCCESS_MESSAGES['login_success'])
 
             if session_key:
                 Cart.objects.filter(session_key=session_key).update(user=user)
 
-            auth.login(request, user)
-            messages.success(request, SUCCESS_MESSAGES['register_success'])
-
             return HttpResponseRedirect(reverse('main:home'))
 
         else:
-            for field, errors in form.errors.items():
-                for error in errors:
-                    messages.error(request, f"{field.capitalize()}: {error}")
+            return super().form_invalid(form)
 
-    else:
-        form = UserRegistrationForm()
+    def get_success_url(self):
+        redirect_to = self.request.POST.get('next', None)
 
-    context = {
-        'title': 'registration',
-        'form': form,
-    }
+        if redirect_to and redirect_to != reverse('user:logout'):
+            return redirect_to
 
-    return render(request, 'user/registration.html', context)
+        return reverse_lazy('main:home')
+
+    def form_invalid(self, form):
+        for field, errors in form.errors.items():
+            for error in errors:
+                messages.error(self.request, f"Validation error: {error}")
+        return super().form_invalid(form)
+
+
+class UserRegistrationView(CreateView):
+    template_name = 'user/registration.html'
+    form_class = UserRegistrationForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = PAGES_NAMES['registration_page']
+        return context
+
+    def form_valid(self, form):
+        session_key = self.request.session.session_key
+        user = form.instance
+
+        if user:
+            form.save()
+            auth.login(self.request, user)
+
+            if session_key:
+                Cart.objects.filter(session_key=session_key).update(user=user)
+
+            messages.success(self.request, SUCCESS_MESSAGES['register_success'])
+            return HttpResponseRedirect(reverse('main:profile'))
+
+        else:
+            return super().form_invalid(form)
+
+    def get_success_url(self):
+        redirect_to = self.request.POST.get('next', None)
+
+        if redirect_to and redirect_to != reverse('user:logout'):
+            return redirect_to
+
+        return reverse_lazy('main:home')
+
+    def form_invalid(self, form):
+        for field, errors in form.errors.items():
+            for error in errors:
+                messages.error(self.request, f"Validation error: {error}")
+        return super().form_invalid(form)
 
 @login_required
 def profile(request):
